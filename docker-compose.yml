@@ -1,0 +1,21 @@
+version: '2'
+services:
+  php:
+    build: .
+    ports:
+      - "7000:7000"
+    volumes:
+      - .:/myapp
+    links:
+      - metrics
+    depends_on:
+      - metrics
+  metrics:
+    image: datadog/docker-dd-agent:latest
+    container_name: workshop_dd-agent
+    environment:
+      - API_KEY=__your_datadog_api_key_here__
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /proc/:/host/proc/:ro
+      - /sys/fs/cgroup/:/host/sys/fs/cgroup:ro
